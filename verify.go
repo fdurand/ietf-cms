@@ -45,13 +45,11 @@ func (sd *SignedData) VerifyDetached(message []byte, opts x509.VerifyOptions) ([
 func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x509.Certificate, error) {
 	spew.Dump("DUMP Verify")
 	if len(sd.psd.SignerInfos) == 0 {
-		spew.Dump("1")
 		return nil, protocol.ASN1Error{Message: "no signatures found"}
 	}
 
 	certs, err := sd.psd.X509Certificates()
 	if err != nil {
-		spew.Dump("2")
 		return nil, err
 	}
 
@@ -78,7 +76,6 @@ func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x
 			// SignedAttrs may only be absent if EncapContentInfo eContentType is
 			// id-data.
 			if !sd.psd.EncapContentInfo.IsTypeData() {
-				spew.Dump("3")
 				return nil, protocol.ASN1Error{Message: "missing SignedAttrs"}
 			}
 
@@ -90,36 +87,30 @@ func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x
 			// MessageDigest attributes.
 			siContentType, err := si.GetContentTypeAttribute()
 			if err != nil {
-				spew.Dump("4")
 				return nil, err
 			}
 			if !siContentType.Equal(sd.psd.EncapContentInfo.EContentType) {
-				spew.Dump("5")
 				return nil, protocol.ASN1Error{Message: "invalid SignerInfo ContentType attribute"}
 			}
 
 			// Calculate the digest over the actual message.
 			hash, err := si.Hash()
 			if err != nil {
-				spew.Dump("6")
 				return nil, err
 			}
 			actualMessageDigest := hash.New()
 			if _, err = actualMessageDigest.Write(econtent); err != nil {
-				spew.Dump("7")
 				return nil, err
 			}
 
 			// Get the digest from the SignerInfo.
 			messageDigestAttr, err := si.GetMessageDigestAttribute()
 			if err != nil {
-				spew.Dump("8")
 				return nil, err
 			}
 
 			// Make sure message digests match.
 			if !bytes.Equal(messageDigestAttr, actualMessageDigest.Sum(nil)) {
-				spew.Dump("9")
 				return nil, errors.New("invalid message digest")
 			}
 
@@ -127,25 +118,21 @@ func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x
 			// leading class/tag/length bytes. This includes the digest of the
 			// original message, so it is implicitly signed too.
 			if signedMessage, err = si.SignedAttrs.MarshaledForSigning(); err != nil {
-				spew.Dump("10")
 				return nil, err
 			}
 		}
 
 		cert, err := si.FindCertificate(certs)
 		if err != nil {
-			spew.Dump("11")
 			return nil, err
 		}
 
 		algo := si.X509SignatureAlgorithm()
 		if algo == x509.UnknownSignatureAlgorithm {
-			spew.Dump("12")
 			return nil, protocol.ErrUnsupported
 		}
 
 		if err := cert.CheckSignature(algo, signedMessage, si.Signature); err != nil {
-			spew.Dump("13")
 			return nil, err
 		}
 
@@ -158,12 +145,10 @@ func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x
 		optsCopy := opts
 
 		if hasTS, err := hasTimestamp(si); err != nil {
-			spew.Dump("14")
 			return nil, err
 		} else if hasTS {
 			tsti, err := getTimestamp(si, tsOpts)
 			if err != nil {
-				spew.Dump("15")
 				return nil, err
 			}
 
@@ -180,7 +165,8 @@ func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x
 		}
 
 		if chain, err := cert.Verify(optsCopy); err != nil {
-			spew.Dump("16")
+			spew.Dump(optsCopy)
+			spew.Dump(cert)
 			return nil, err
 		} else {
 			chains = append(chains, chain)
