@@ -108,6 +108,8 @@ func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x
 			if err != nil {
 				return nil, err
 			}
+			spew.Dump(messageDigestAttr)
+			spew.Dump(actualMessageDigest.Sum(nil))
 
 			// Make sure message digests match.
 			if !bytes.Equal(messageDigestAttr, actualMessageDigest.Sum(nil)) {
