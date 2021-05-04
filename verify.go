@@ -98,6 +98,8 @@ func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x
 		hash, err := si.Hash()
 		spew.Dump("VLA LE HASH DE IETF")
 		spew.Dump(hash)
+		spew.Dump(econtent)
+
 		if err != nil {
 			return nil, err
 		}
