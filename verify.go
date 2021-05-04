@@ -96,6 +96,8 @@ func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x
 
 		// Calculate the digest over the actual message.
 		hash, err := si.Hash()
+		spew.Dump("VLA LE HASH DE IETF")
+		spew.Dump(hash)
 		if err != nil {
 			return nil, err
 		}
