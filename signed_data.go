@@ -4,7 +4,7 @@ import (
 	"crypto/x509"
 	"encoding/asn1"
 
-	"github.com/github/ietf-cms/protocol"
+	"github.com/fdurand/ietf-cms/protocol"
 )
 
 // SignedData represents a signed message or detached signature.

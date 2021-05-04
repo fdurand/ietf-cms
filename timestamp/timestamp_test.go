@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/github/ietf-cms/protocol"
+	"github.com/fdurand/ietf-cms/protocol"
 )
 
 var (

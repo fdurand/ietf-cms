@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/github/ietf-cms/protocol"
+	"github.com/fdurand/ietf-cms/protocol"
 )
 
 func ExampleSignedData() {
