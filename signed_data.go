@@ -4,6 +4,7 @@ import (
 	"crypto/x509"
 	"encoding/asn1"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/fdurand/ietf-cms/protocol"
 )
 
@@ -30,11 +31,16 @@ func NewSignedData(data []byte) (*SignedData, error) {
 // ParseSignedData parses a SignedData from BER encoded data.
 func ParseSignedData(ber []byte) (*SignedData, error) {
 	ci, err := protocol.ParseContentInfo(ber)
+	spew.Dump("parsed signed ietf")
+	spew.Dump(ci)
 	if err != nil {
 		return nil, err
 	}
 
 	psd, err := ci.SignedDataContent()
+	spew.Dump("SignedDataContent ietf")
+	spew.Dump(psd)
+
 	if err != nil {
 		return nil, err
 	}

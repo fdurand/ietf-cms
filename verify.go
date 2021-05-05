@@ -43,7 +43,7 @@ func (sd *SignedData) VerifyDetached(message []byte, opts x509.VerifyOptions) ([
 }
 
 func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x509.Certificate, error) {
-	spew.Dump("DUMP Verify")
+
 	if len(sd.psd.SignerInfos) == 0 {
 		return nil, protocol.ASN1Error{Message: "no signatures found"}
 	}
@@ -173,8 +173,6 @@ func (sd *SignedData) verify(econtent []byte, opts x509.VerifyOptions) ([][][]*x
 		}
 
 		if chain, err := cert.Verify(optsCopy); err != nil {
-			spew.Dump(optsCopy)
-			spew.Dump(cert)
 			return nil, err
 		} else {
 			chains = append(chains, chain)
